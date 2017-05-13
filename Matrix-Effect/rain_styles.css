@@ -1,0 +1,24 @@
+body{
+  background-color:rgb(5,15,40);
+  font-family:Courier New;
+  padding:0;
+  margin:0;
+
+}
+#c{
+  display:block;
+}
+#notC{
+  display:none
+}
+#canvas-wrap { position:relative; }
+#canvas-wrap canvas { position:absolute; top:0; left:0; z-index:0 }
+
+#overlay{
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+border: 0;
+z-index: 50;
+}

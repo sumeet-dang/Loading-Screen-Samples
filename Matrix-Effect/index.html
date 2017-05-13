@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="styles.css">
+
+  </head>
+  <body>
+    <div id="canvas-wrap">
+        <canvas id="c"></canvas>
+        <div id="overlay">
+
+        </div>
+      </div>
+<script>
+
+  var c = document.getElementById("c");
+  var ctx = c.getContext("2d");
+
+  //making the canvas full screen
+  c.height = window.innerHeight;
+  c.width = window.innerWidth;
+
+  fillColors = ['rgb(90,100,180)','rgb(30,30,90)','rgb(170,200,255)','rgb(30,30,120)'];
+
+  var characters = "1234567890abcdefghijklmnopqrstuvwxyz";
+  //converting the string into an array of single characters
+  chinese = characters.split("");
+
+  var font_size = 15;
+  var columns = c.width/font_size; //number of columns for the rain
+  //an array of drops - one per column
+  var drops = [];
+
+  //variable to keep track of ending drops
+  var end_drop = 0;
+  var i = 0;
+  screen_filled = false;
+  //x below is the x coordinate
+  //1 = y co-ordinate of the drop(same for every drop initially)
+  for(var x = 0; x < columns; x++)
+    drops[x] = 1;
+
+  //drawing the characters
+  function draw()
+  {
+    //Black BG for the canvas
+    //translucent BG to show trail
+    ctx.fillStyle = "rgba(5, 15, 30, 0.05)";
+    ctx.fillRect(0, 0, c.width, c.height);
+
+
+    ctx.fillStyle = fillColors[Math.floor(Math.random()*fillColors.length)];
+    ctx.font = font_size + "px arial";
+    //looping over drops
+    for(i = end_drop; i < drops.length; i++)
+    {
+      //a random chinese character to print
+      var text = characters[Math.floor(Math.random()*characters.length)];
+      //x = i*font_size, y = value of drops[i]*font_size
+      ctx.fillText(text, i*font_size, drops[i]*font_size);
+
+      //sending the drop back to the top randomly after it has crossed the screen
+      //adding a randomness to the reset to make the drops scattered on the Y axis
+      if(drops[i]*font_size > c.height && Math.random() > 0.975)
+        drops[i] = 0;
+
+      //incrementing Y coordinate
+      drops[i]++;
+    }
+  }
+
+  function stop_drop()
+  {
+    if(screen_filled == true){
+      end_drop++;
+    }
+  }
+
+  function screen_fill()
+  {
+    screen_filled = true;
+  }
+
+  //     function resizeFrame() {
+  //       console.log("resized");
+  //     c.width = window.innerWidth;
+  //     c.height = window.innerHeight;
+  // }
+
+  setInterval(draw, 33);
+  setTimeout(screen_fill, 3000);
+  //setInterval(stop_drop,200);
+
+</script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+/*basic reset*/
+* {margin: 0; padding: 0;}
+/*adding a black bg to the body to make things clearer*/
+body {background: rgb(5,15,60);}
+canvas {display: block;}
+
+#canvas-wrap { position:relative; }
+#canvas-wrap canvas { position:absolute; top:0; left:0; z-index:0 }
+
+#overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  z-index: 50;
+}
+
+.text {
+  color:red;
+}

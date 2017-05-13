@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Matrix</title>
+	<link rel="stylesheet" href="rain_styles.css">
+</head>
+<body>
+		<div id="canvas-wrap">
+        <canvas id="notC"></canvas>
+		<canvas style="postion:relative" id="c"></canvas>
+        <div id="overlay">
+
+        </div>
+      </div>
+
+<script>
+
+	var c = document.getElementById("c");
+	var ctx = c.getContext("2d");
+
+	c.height = window.innerHeight-20;
+	c.width = window.innerWidth-20;
+	var characters = "0123456789qwertyuiopasdfghjklzxcvbnm";
+	var charactersArray = characters.split('');
+
+	var font_size = 6;
+	var columns = c.width/font_size;
+
+	var drops = [];
+
+	for(var i = 0; i< columns; i++){
+		//drops[i]=Math.random()*c.height;
+		drops[i]=1;
+	}
+
+
+
+	var W = 1000;
+	var H = 600;
+	var string = 'Welcome To';
+	var xstring = 220;
+	var counter = 0;
+
+	var tcanvas = document.getElementById("notC");
+	tcanvas.width = W;
+	tcanvas.height = H;
+	var tc = tcanvas.getContext("2d");
+
+	tc.fillStyle = "white";
+	tc.fillRect(0, 0, W, H);
+	tc.fillStyle="#000";
+	tc.font = "900 60px Verdana";
+
+	fillColors = ['rgba(0,200,0,.4)','rgba(42,237,45,.4)','rgba(28,165,30,.4)','rgba(121,209,122,.4)','rgba(201,219,220,.4)'];
+
+
+
+	var heightPosition = 200;
+	var widthPosition = c.width/2 - W/2;
+
+
+	var pixels = tc.getImageData(0, 0, W, H);
+	var colordata = pixels.data;
+
+
+	function draw(){			
+			tc.fillStyle = "white";
+			tc.fillRect(0, 0, W, H);
+			tc.fillStyle="#000";
+			tc.font = "900 80px Verdana";
+			tc.fillText(string, xstring, 300);
+			pixels = tc.getImageData(0, 0, W, H);
+			colordata = pixels.data;
+
+
+		ctx.fillStyle = "rgba(0,0,0,0.016)";
+		ctx.fillRect(0,0, c.width, c.height);
+
+		ctx.fillStyle="#0F0";
+		ctx.font = font_size + "px Helvetica";
+		ctx.shadowColor = '#0FF';
+     				 ctx.shadowBlur = 0;
+     				 ctx.shadowOffsetX = 0;
+     					 ctx.shadowOffsetY = 0;
+
+		for(var i = 0; i < drops.length;i+=.5){
+			//ctx.fillStyle="rgba(0,200,0,.4)";
+			ctx.fillStyle = fillColors[Math.floor(Math.random()*fillColors.length)];
+			if(drops[Math.floor(i)]*font_size>heightPosition&&drops[Math.floor(i)]*font_size<heightPosition+H&&i*font_size>widthPosition&&i*font_size<widthPosition+W){
+				var height= drops[Math.floor(i)]*font_size-heightPosition;
+				var width = font_size*i-widthPosition;
+				var location = (W*height+width)*4;
+				var r = colordata[location];
+				var g = colordata[location+1];
+				var b = colordata[location+2];
+
+					var gray = r+ g + b;
+
+				if(gray<500){
+					ctx.fillStyle="aqua";
+					//ctx.shadowBlur = 60;
+				}
+
+			}
+			var text = charactersArray[Math.floor(Math.random()*charactersArray.length)];
+			ctx.fillText(text, i*font_size, drops[Math.floor(i)]*font_size);
+			ctx.shadowBlur = 0;
+			if(counter > 2)
+			{
+				if(drops[i]*font_size> c.height&&Math.random()>.975)
+				{				
+					drops[Math.floor(i)]=0;
+					font_size = 12;
+					columns = c.width/font_size;
+				}
+			}
+			else
+			{
+				if(drops[i]*font_size> c.height)
+				{				
+					drops[Math.floor(i)]=0;					
+				}
+			}
+			
+			drops[Math.floor(i)]++;
+		}
+
+
+
+	}
+	
+	function changeText() {
+		counter++;
+		console.log(string);
+		switch (counter) {		
+		case 1:
+			string = "The Portfolio Of";
+			xstring = 150;
+			break;
+		case 2:
+			xstring = 220;
+			string = "Sumeet Dang";
+			break;
+		default:
+			string = "";
+	}
+	}
+	
+	setInterval(draw, 33);
+	setInterval(changeText,2800);
+</script>
+</body>
+
+</html>
